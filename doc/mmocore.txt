@@ -1,0 +1,2 @@
+http://trac.l2jserver.com/wiki/Useful_links
+http://svn.l2jserver.com/trunk/MMOCore

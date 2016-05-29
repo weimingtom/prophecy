@@ -1,0 +1,14 @@
+------------------------
+
+https://github.com/eishay/jvm-serializers/wiki
+
+----------------------
+
+XBlink 1.0.0
+http://www.iteye.com/news/22986?page=2#comments
+
+Simple
+http://simple.sourceforge.net/download/stream/doc/tutorial/tutorial.php
+
+XStream
+http://xstream.codehaus.org/

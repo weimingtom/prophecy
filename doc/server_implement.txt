@@ -1,0 +1,12 @@
+C:\Documents and Settings\Administrator\workspace\gpg4-demo
+nio
+
+http://code.google.com/p/regesa/ 
+rsserver
+
+http://rt5e.googlecode.com/svn/trunk 
+netty
+
+http://holdenms.googlecode.com/svn/trunk 
+Mina
+ 

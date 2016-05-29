@@ -1,0 +1,13 @@
+2011/05/10 23:38:05
+java.lang.StringIndexOutOfBoundsException
+	at java.lang.AbstractStringBuilder.delete(AbstractStringBuilder.java:702)
+	at java.lang.StringBuffer.delete(StringBuffer.java:373)
+	at com.ugame.prophecy.ui.GUIMain$4.run(GUIMain.java:293)
+	at org.eclipse.swt.widgets.Display.runTimer(Unknown Source)
+	at org.eclipse.swt.widgets.Display.messageProc(Unknown Source)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessageW(Native Method)
+	at org.eclipse.swt.internal.win32.OS.DispatchMessage(Unknown Source)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Unknown Source)
+	at com.ugame.prophecy.ui.GUIMain.<init>(GUIMain.java:304)
+	at com.ugame.prophecy.ui.GUIMain.main(GUIMain.java:341)
+

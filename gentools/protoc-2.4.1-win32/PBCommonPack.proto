@@ -1,0 +1,20 @@
+package pb;
+
+option java_package = "com.ugame.prophecy.serializer.protobuf";
+option java_outer_classname = "PBCommonPackProtos";
+
+message PBLoginPack {
+	required string username = 1;
+	required string password = 2;
+}
+
+message PBMovePack {
+	required string username = 1;
+	required int32 x = 2;
+	required int32 y = 3;
+}
+
+message PBCommonPack {
+	optional PBLoginPack login = 1;
+	optional PBMovePack move = 2;
+}

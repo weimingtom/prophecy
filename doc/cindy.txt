@@ -1,0 +1,178 @@
+http://www.iteye.com/topic/11185
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------
+[19:40:22]ERROR [net.sf.cindy.session.dispatcher.DefaultDispatcher]
+java.lang.NullPointerException
+java.lang.NullPointerException
+	at net.sf.cindy.session.nio.AbstractChannelSession$ChannelReactorHandler$1.run(AbstractChannelSession.java:214)
+	at net.sf.cindy.session.dispatcher.DefaultDispatcher$Worker.run(DefaultDispatcher.java:122)
+	
+------------------------------
+http://www.dazhuangzhuang.com/?p=608
+
+
+Cindy版本通信服务器挂死问题分析
+by CHILLWARMOON on 2010 年 02 月 03 日 ·	 评论暂缺
+为配合测试组对生产的通信服务器进行测试，防止出现去年通信服务器挂死问题，首先在本地使用客户端对186上的通信服务器进行压力测试。因为Comclient发送效率问题，而不能使通信服务器产生很大的压力，所以使用模拟客户端对通信服务器进行测试。测试场景如下：
+模拟长连接客户端MC–>通信服务器–>模拟长连接客户端MC，MC在本地部署。在经过几次测试后，重现了去年的通信服务器挂死问题。分析是由于在Um32CindyHandler中，对session进行同步控制引发的死锁。建议更改在Um32CindyHandler对于session的同步控制。分析过程如下：
+通信服务器挂死的时候，jconsole监控相关线程如下所示：
+
+Name: Reactor-1
+State: WAITING on edu.emory.mathcs.backport.java.util.concurrent.locks.CondVar@1dbda4f
+Total blocked: 648 Total waited: 541
+
+Stack trace:
+java.lang.Object.wait(Native Method)
+java.lang.Object.wait(Object.java:474)
+edu.emory.mathcs.backport.java.util.concurrent.locks.CondVar.await(CondVar.java:75)
+edu.emory.mathcs.backport.java.util.concurrent.ArrayBlockingQueue.put(ArrayBlockingQueue.java:251)
+net.sf.cindy.session.dispatcher.DefaultDispatcher.dispatch(DefaultDispatcher.java:207)
+net.sf.cindy.session.nio.AbstractChannelSession$ChannelReactorHandler.dispatch(AbstractChannelSession.java:202)
+net.sf.cindy.session.nio.AbstractChannelSession$ChannelReactorHandler.onWritable(AbstractChannelSession.java:301)
+net.sf.cindy.session.nio.reactor.DefaultReactor.processSelectedKeys(DefaultReactor.java:357)
+net.sf.cindy.session.nio.reactor.DefaultReactor.afterSelect(DefaultReactor.java:295)
+net.sf.cindy.session.nio.reactor.DefaultReactor$1.run(DefaultReactor.java:132)
+java.lang.Thread.run(Thread.java:595)
+
+Name: Dispatcher-1
+State: BLOCKED on net.sf.cindy.session.nio.SocketChannelSession@a948c2 owned by: MTSms#3
+Total blocked: 11 Total waited: 17,485
+
+Stack trace:
+com.bs2.core.nio.CindyHandler.send_response(Unknown Source:61)
+com.umpay.um32cs.Um32CindyHandler.send_array_or_um32(Um32CindyHandler.java:175)
+com.umpay.um32cs.Um32CindyHandler.objectReceived(Um32CindyHandler.java:97)
+com.umpay.um32cs.Um32CindyHandler0.objectReceived(Um32CindyHandler0.java:47)
+net.sf.cindy.filter.SessionHandlerFilter.objectReceived(SessionHandlerFilter.java:42)
+net.sf.cindy.session.AbstractSessionFilterChain.objectReceived(AbstractSessionFilterChain.java:71)
+net.sf.cindy.SessionFilterAdapter.objectReceived(SessionFilterAdapter.java:37)
+net.sf.cindy.session.AbstractSessionFilterChain.objectReceived(AbstractSessionFilterChain.java:71)
+net.sf.cindy.filter.DispatcherFilter$3.run(DispatcherFilter.java:66)
+net.sf.cindy.session.dispatcher.DirectDispatcher.dispatch(DirectDispatcher.java:54)
+net.sf.cindy.session.dispatcher.DefaultDispatcher.dispatch(DefaultDispatcher.java:197)
+net.sf.cindy.filter.DispatcherFilter.objectReceived(DispatcherFilter.java:63)
+net.sf.cindy.session.AbstractSessionFilterChain.objectReceived(AbstractSessionFilterChain.java:71)
+net.sf.cindy.filter.PacketDecoderFilter.recognize(PacketDecoderFilter.java:66)
+net.sf.cindy.filter.PacketDecoderFilter$CopyPacketDecoderFilter.packetReceived(PacketDecoderFilter.java:154)
+net.sf.cindy.session.AbstractSessionFilterChain.packetReceived(AbstractSessionFilterChain.java:63)
+net.sf.cindy.filter.DispatcherFilter$2.run(DispatcherFilter.java:56)
+net.sf.cindy.session.dispatcher.DefaultDispatcher$Worker.run(DefaultDispatcher.java:122)
+
+Name: MTSms#2
+State: BLOCKED on net.sf.cindy.session.nio.SocketChannelSession@1c818c4 owned by: MTSms#17
+Total blocked: 2 Total waited: 0
+
+Stack trace:
+com.bs2.core.nio.CindyHandler.send_response(Unknown Source:61)
+com.umpay.um32cs.Um32SendQ.doSingle(Um32SendQ.java:79)
+com.umpay.um32cs.Um32SendQ.onData(Um32SendQ.java:52)
+com.bs2.core.ext.IIIllIllIIlllIIl.run(Unknown Source:79)
+com.bs2.core.ext.ThreadPoolImp$ThreadWorker._$1(Unknown Source:162)
+com.bs2.core.ext.ThreadPoolImp$ThreadWorker.run(Unknown Source:182)
+java.lang.Thread.run(Thread.java:595)
+
+Name: MTSms#3
+State: WAITING on edu.emory.mathcs.backport.java.util.concurrent.locks.CondVar@1dbda4f
+Total blocked: 10 Total waited: 20
+
+Stack trace:
+java.lang.Object.wait(Native Method)
+java.lang.Object.wait(Object.java:474)
+edu.emory.mathcs.backport.java.util.concurrent.locks.CondVar.await(CondVar.java:75)
+edu.emory.mathcs.backport.java.util.concurrent.ArrayBlockingQueue.put(ArrayBlockingQueue.java:251)
+net.sf.cindy.session.dispatcher.DefaultDispatcher.dispatch(DefaultDispatcher.java:207)
+net.sf.cindy.filter.DispatcherFilter.packetSend(DispatcherFilter.java:73)
+net.sf.cindy.session.AbstractSessionFilterChain.packetSend(AbstractSessionFilterChain.java:79)
+net.sf.cindy.session.nio.AbstractChannelSession.send(AbstractChannelSession.java:126)
+net.sf.cindy.session.AbstractSession.send(AbstractSession.java:210)
+net.sf.cindy.session.AbstractSession.send(AbstractSession.java:199)
+com.bs2.core.nio.CindyHandler.send_response(Unknown Source:63)
+com.umpay.um32cs.Um32SendQ.doSingle(Um32SendQ.java:79)
+com.umpay.um32cs.Um32SendQ.onData(Um32SendQ.java:52)
+com.bs2.core.ext.IIIllIllIIlllIIl.run(Unknown Source:79)
+com.bs2.core.ext.ThreadPoolImp$ThreadWorker._$1(Unknown Source:162)
+com.bs2.core.ext.ThreadPoolImp$ThreadWorker.run(Unknown Source:182)
+java.lang.Thread.run(Thread.java:595)
+
+Name: MTSms#17
+State: WAITING on edu.emory.mathcs.backport.java.util.concurrent.locks.CondVar@1dbda4f
+Total blocked: 5 Total waited: 3
+
+Stack trace:
+java.lang.Object.wait(Native Method)
+java.lang.Object.wait(Object.java:474)
+edu.emory.mathcs.backport.java.util.concurrent.locks.CondVar.await(CondVar.java:75)
+edu.emory.mathcs.backport.java.util.concurrent.ArrayBlockingQueue.put(ArrayBlockingQueue.java:251)
+net.sf.cindy.session.dispatcher.DefaultDispatcher.dispatch(DefaultDispatcher.java:207)
+net.sf.cindy.filter.DispatcherFilter.packetSend(DispatcherFilter.java:73)
+net.sf.cindy.session.AbstractSessionFilterChain.packetSend(AbstractSessionFilterChain.java:79)
+net.sf.cindy.session.nio.AbstractChannelSession.send(AbstractChannelSession.java:126)
+net.sf.cindy.session.AbstractSession.send(AbstractSession.java:210)
+net.sf.cindy.session.AbstractSession.send(AbstractSession.java:199)
+com.bs2.core.nio.CindyHandler.send_response(Unknown Source:63)
+com.umpay.um32cs.Um32SendQ.doSingle(Um32SendQ.java:79)
+com.umpay.um32cs.Um32SendQ.onData(Um32SendQ.java:52)
+com.bs2.core.ext.IIIllIllIIlllIIl.run(Unknown Source:79)
+com.bs2.core.ext.ThreadPoolImp$ThreadWorker._$1(Unknown Source:162)
+com.bs2.core.ext.ThreadPoolImp$ThreadWorker.run(Unknown Source:182)
+java.lang.Thread.run(Thread.java:595)
+
+MTSms#4到MTSms#16共13个线程，同线程MTSms#2一样，处于BLOCKED状态，等待MTSms#17线程所持有的锁对象net.sf.cindy.session.nio.SocketChannelSession@1c818c4的释放。
+
+问题的产生是因为线程Dispatcher-1和线程MTSms#3死锁造成的，当MTSms#3获取SocketChannelSession@a948c2锁对象之后，打算将消息通过该session转发给连接到该session的客户端节点，但是线程Dispatcher-1为了应答SocketChannelSession@a948c2发上来的请求发ack时，等待锁对象SocketChannelSession@a948c2的释放。而MTSms#3在转发消息的时候，如上述trace所示，会调用到net.sf.cindy.session.dispatcher.DefaultDispatcher.dispatch(DefaultDispatcher.java:207)，代码如下所示：
+
+if (Thread.currentThread() == worker) {
+dispatcher.dispatch(session, event);
+} else {
+BlockingQueue queue = worker.queue;
+if (!queue.offer(event)) {
+// flow control
+if (elapsedTime.getElapsedTime() >= 10000) {
+elapsedTime.reset();
+log.warn(“dispatcher flow control”);
+}
+try {
+queue.put(event);
+} catch (InterruptedException e) {
+}
+}
+}
+因为不属于同一线程，而且queue中是Runnable的队列(如Name: Dispatcher-1的stack trace所述)，一旦压力过大，有可能满。当队列满时，此时offer该元素到队列时返回false，用put入队时会发生阻塞。但是消费该队列元素的线程Dispatcher-1在等待锁对象SocketChannelSession@a948c2的释放，因此会产生死锁。
+
+产生死锁之后MTSms#17线程又被queue阻塞，所以MTSms#4到MTSms#16共13个线程会等待锁对象SocketChannelSession@1c818c4的释放。
+
+因此如果此时再有客户端向通信服务器发送消息，通过tcpdump可见通信服务器TCP层的滑动窗口为0
+
+15:32:30.025039 IP hzb-laptop.local.39847 > 10.10.41.186.8032: . 75268:76728(1460) ack 1 win 92
+15:32:30.104905 IP 10.10.41.186.8032 > hzb-laptop.local.39847: . ack 76728 win 0
+15:32:30.327985 IP hzb-laptop.local.39847 > 10.10.41.186.8032: . ack 1 win 92
+15:32:30.328238 IP 10.10.41.186.8032 > hzb-laptop.local.39847: . ack 76728 win 0
+15:32:30.775905 IP hzb-laptop.local.39847 > 10.10.41.186.8032: . ack 1 win 92
+15:32:30.776081 IP 10.10.41.186.8032 > hzb-laptop.local.39847: . ack 76728 win 0
+15:32:31.671963 IP hzb-laptop.local.39847 > 10.10.41.186.8032: . ack 1 win 92
+15:32:31.672420 IP 10.10.41.186.8032 > hzb-laptop.local.39847: . ack 76728 win 0
+15:32:33.463916 IP hzb-laptop.local.39847 > 10.10.41.186.8032: . ack 1 win 92
+15:32:33.464457 IP 10.10.41.186.8032 > hzb-laptop.local.39847: . ack 76728 win 0
+15:32:37.047714 IP hzb-laptop.local.39847 > 10.10.41.186.8032: . ack 1 win 92
+15:32:37.047981 IP 10.10.41.186.8032 > hzb-laptop.local.39847: . ack 76728 win 0
+
+相应的在通信服务器端用netstat可见该socket pair的Recv-Q的值很高，其他socket pair的Recv-Q值也很大。
+tcp 76727 0 10.10.41.186:8032 10.10.41.150:39847 ESTABLISHED
+
+通信服务器此时的日志如下，表现为线程池中没有足够的线程来处理消息。
+0125-162407.514 [Um32SendQ ] DEBUG ThreadPoolGroup – Active:15/15, Idle:0/3 No ThreadWorker…wait
+0125-162407.514 [Um32SendQ ] DEBUG ThreadPoolGroup – my_wait_for_worker(60000ms)…

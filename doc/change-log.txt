@@ -1,0 +1,71 @@
+Update Log:
+	2011-12-27 0.0.7
+		* 初步支持protostuff-runtime（protobuf格式）封包的反序列化
+		* 初步支持thrift二进制格式封包的反序列化
+		* 添加用于以上两种封包序列化测试的Lua脚本
+		* slf4j更新至1.6.4
+		* 消除SWT界面在强行关闭时出现的异常输出
+		* 仅发布源码包
+	2011-12-27 (0.0.6 beta)
+		* 支持protostuff-runtime的protobuf格式
+		* 添加protostuff-runtime的protobuf格式的Lua测试脚本
+	2011-12-26 (0.0.6 beta)
+		* 支持thrift二进制格式数据的反序列化
+		* 添加thrift二进制格式数据的Lua测试脚本。
+	2011-12-07 (0.0.6 beta)
+		* 界面在强行关闭时抛异常的bug（文本框已经被dispose，不能再append）
+		* 根据ExecutorService的注释，
+		用shutdownAndAwaitTermination关闭mina的线程池。
+	2011-11-29 (0.0.6 beta)
+		* slf4j更新至1.6.4
+		* TODO:需要对数据添加必要的finally保护
+		* TODO:testthrift
+		* TODO:testprotostuff
+	2011-11-26 0.0.6
+		* 简化VariantType
+		* 移植到yanf4j(包含在Xmemcached中)
+		* 初步支持protobuf封包的反序列化
+		* 测试代码支持protobuf封包的简单序列化（lua实现）
+		* 从此版本开始，重心将转移至封包和协议的解析。
+		* 只发布源码包。
+	2011-11-26 (0.0.5 beta)
+		* 去除通用包结构VariantType的多余域（只保留int和String类型）
+	2011-11-24 (0.0.5 beta)
+		* pack解码加入protobuf反序列化代码
+		* 添加lua脚本的protobuf测试代码（手工编码，见packtest02.lua）
+		* 可以在脚本中动态运行System.gc()，
+		* 小型压力测试MINA的GC效果（~30MB -> ~90MB -> ~40MB）。
+	2011-10-31 (0.0.5 beta)
+		* 移植到yanf4j
+	2011-10-23 0.0.5
+		* 移植到xnet
+		* 移植到cindy（给cindy的代码打补丁，但bug未完全解决）
+		* 计划学习用纯Java NIO写一个网络底层实现（不依赖外部库）
+		* 计划加入关闭纳格算法的代码
+	2011-10-23 (0.0.4 beta)
+		* 修正xnet在写入PackBuffer时长度计算错误的bug
+	2011-10-14 (0.0.4 beta)
+		* 加入xnet接口部分，但有bug
+	2011-10-09 (0.0.4 beta)
+		* MINA2接口加入关闭纳格算法的代码（考虑以后改为配置项）
+		见doc/setTcpNoDelay.txt
+	2011-10-06 (0.0.4 beta)
+		* 修改cindy接口部分，使用会话属性保存会话数据。
+		* 新增单线程Java NIO的网络实现。
+	2011-09-26 (0.0.4 beta)
+		* 给cindy代码打补丁，修正移植到cindy的接口bug，
+		见doc/AbstractChannelSession.java:214行
+	2011-09-07 0.0.4 
+		* 移植到grizzly，抽离并整理rs服务器的底层网络实现。
+	2011-07-14 0.0.3
+	    * 尝试模拟RTMP协议
+	    * 加入script，protocol和serializer包	
+		* 改用slf4j-log4j12-1.6.1.jar，让slf4j只用log4j实现
+		* 消除所有log4j的使用，全部改为用slf4j作为界面，间接调用log4j
+		* 消除对IoSession的依赖，使用独立于NIO实现库的context类传递会话数据
+		* 移植到netty2和xSocket
+		* 用ByteBuffer代替IoBuffer解包
+	2011-05-11 0.0.2 
+		* 重构了接受包解包的代码，修正接收包的bug，优化图形界面的日志输出。
+	2010-11-05 0.0.1 
+		* 加入swt界面的java版。

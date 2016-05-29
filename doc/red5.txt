@@ -1,0 +1,69 @@
+RED5的API介紹-4
+2010-06-22 09:32
+org.red5.server.net.rtmp.* 我们可以利用此类别让java程式透过rtmp协定与Red5沟通 这可以做到让tomcat得以透过java在http协定与rtmp协定之间传资料 此相关类别的范例使用程式经我努力的寻找， 终
+org.red5.server.net.rtmp.*
+我们可以利用此类别让java程式透过rtmp协定与Red5沟通
+这可以做到让tomcat得以透过java在http协定与rtmp协定之间传资料
+此相关类别的范例使用程式经我努力的寻找，
+终於在red5官方网站的讨论区找到了XD (好感动吶)
+范例程式网址如下
+http://osflash.org/pipermail/red5_osflash.org/2007-June/012628.html
+其范例程式内容如下
+import java.util.ArrayList;
+import java.util.List;
+import org.red5.io.utils.ObjectMap;
+import org.red5.server.api.IConnection;
+import org.red5.server.api.Red5;
+import org.red5.server.api.service.IPendingServiceCall;
+import org.red5.server.api.service.IPendingServiceCallback;
+import org.red5.server.net.rtmp.RTMPClient;
+/**
+* 简单的客户端模仿
+*/
+public class TestClient {
+   public static void main(String[] args) {
+   try {
+   Thread t = new Thread(new MyCallback());
+   //这边一定要让程序先暂停，否则若连线尚未建立完成，下面的呼叫会让失作用
+   Thread.sleep(5000);
+   t.start();
+   } catch (InterruptedException e) {
+   e.printStackTrace();
+   }
+   }
+   static class MyCallback implements Runnable {
+   RTMPClient client = new RTMPClient();
+   List actions = new ArrayList ();
+   protected static final ThreadLocal currentSession = new ThreadLocal ();
+   static boolean created = false;
+   IConnection conn = null;
+   public MyCallback() {
+   init();
+   }
+   public void run() {
+   Red5.setConnectionLocal(conn);
+   client.invoke("函数名称", new Object[] { "传入参数" },
+   new IPendingServiceCallback() {
+   public void resultReceived(IPendingServiceCall call) {
+   System.out.println("接收的传回值為: "
+   + call.getResult());
+   }
+   });
+   }
+   private void init() {
+   ObjectMap params = new ObjectMap ();
+   params.put("app", "应用程式名称");
+   params.put("tcUrl", "rtmp://xxx.xxx.xxx.xxx/应用程式名称");
+   client.connect("127.0.0.1", 1935, params,
+   new IPendingServiceCallback() {
+   public void resultReceived(IPendingServiceCall call) {
+   System.out.println("连线结果: "
+   + call.getResult() + "::"
+   + Red5.getConnectionLocal().hashCode());
+   conn = Red5.getConnectionLocal();
+   }
+   });
+   }
+   }
+}
+(责任编辑：温莎)

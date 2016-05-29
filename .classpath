@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen-java"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="lib/swt.jar"/>
+	<classpathentry kind="lib" path="lib/luajava-1.1.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="GameCenter/src"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.12-bin.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.6.4.jar" sourcepath="lib/slf4j-api-1.6.4-sources.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.6.4.jar" sourcepath="lib/slf4j-log4j12-1.6.4-sources.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="lib/mina-core-2.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/netty-3.2.4.Final.jar"/>
+	<classpathentry kind="lib" path="lib/xSocket-2.8.14.jar"/>
+	<classpathentry kind="lib" path="lib/xSocket-multiplexed-2.1.7.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/protobuf-java-2.4.1.jar"/>
+	<classpathentry kind="lib" path="lib/libthrift-0.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/gson-1.7.1.jar" sourcepath="lib/gson-1.7.1-sources.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-core-asl-1.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/jackson-mapper-asl-1.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/hessian-4.0.7.jar" sourcepath="lib/hessian-4.0.7-src.jar"/>
+	<classpathentry kind="lib" path="lib/flex-messaging-common.jar"/>
+	<classpathentry kind="lib" path="lib/flex-messaging-core.jar"/>
+	<classpathentry kind="lib" path="lib/jython-2.5.2.jar"/>
+	<classpathentry kind="lib" path="lib/js.jar"/>
+	<classpathentry kind="lib" path="lib/red5-1.0.0-RC1.jar" sourcepath="lib/red5-1.0.0-RC1-src.jar"/>
+	<classpathentry kind="lib" path="lib/groovy-1.7.10.jar"/>
+	<classpathentry kind="lib" path="lib/hsqldb-2.2.4.jar"/>
+	<classpathentry kind="lib" path="lib/javolution.jar"/>
+	<classpathentry kind="lib" path="lib/mmocore.jar"/>
+	<classpathentry kind="lib" path="lib/activemq-all-5.5.0.jar" sourcepath="C:/Documents and Settings/Administrator/.m2/repository/org/apache/activemq/activemq-all/5.5.0/activemq-all-5.5.0-sources.jar"/>
+	<classpathentry kind="lib" path="lib/grizzly-framework-2.1.1.jar" sourcepath="lib/grizzly-framework-2.1.1-sources.jar"/>
+	<classpathentry kind="lib" path="lib/cindy-3.0b1-mod.jar"/>
+	<classpathentry kind="lib" path="lib/XBlink-1.0.0-jdk6.jar"/>
+	<classpathentry kind="lib" path="lib/simple-xml-2.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/xstream-1.4.1.jar"/>
+	<classpathentry kind="lib" path="lib/kxml2-2.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/xnet.jar"/>
+	<classpathentry kind="lib" path="lib/xmemcached-1.3.5.jar" sourcepath="lib/xmemcached-1.3.5-sources.jar"/>
+	<classpathentry kind="lib" path="lib/fastjson-1.1.9.jar"/>
+	<classpathentry kind="lib" path="lib/avro-1.6.0.jar" sourcepath="lib/avro-1.6.0-sources.jar"/>
+	<classpathentry kind="lib" path="lib/kryo-1.04-all.jar"/>
+	<classpathentry kind="lib" path="lib/protostuff-api-1.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/protostuff-collectionschema-1.0.4.jar"/>
+	<classpathentry kind="lib" path="lib/protostuff-core-1.0.4.jar" sourcepath="C:/Documents and Settings/Administrator/.m2/repository/com/dyuproject/protostuff/protostuff-core/1.0.4/protostuff-core-1.0.4-sources.jar"/>
+	<classpathentry kind="lib" path="lib/protostuff-runtime-1.0.4.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,48 @@
+http://www.jguru.com/faq/view.jsp?EID=42242
+
+Question	 
+What does the Socket method setTcpNoDelay() do and when 
+should I use it?
+
+Answer 
+This controls the TCP_NODELAY socket option. 
+TCP_NODELAY disables/enables the use of Nagle's Algorithm to 
+control the amount of buffering used when transferring data. 
+Nagle's algorithm tries to send full data segments by waiting, 
+if necessary, for enough writes to come through to fill up the 
+segment.
+
+It's useful to disable the use of Nagle's algorithm 
+(setTcpNoDelay(true)) when your communication over that socket 
+comprises small packets and where latency is important. 
+The classic example that comes to mind is a talk/chat application.
+
+Nagle's algorithm is described in more detail in RFC 896.
+
+
+------------------------------------------
+http://mina.apache.org/faq.html
+
+
+
+
+Why does SocketConnector send several messages as one message?
+
+For example, I tried using SocketConnector to send "abc" and "def", 
+but it sent "abcdef". Is it a MINA bug?
+
+No, this is due to your OS trying to send packets more efficiently 
+(see http://en.wikipedia.org/wiki/Nagle_algorithm). 
+You can enable/disable Nagle's algorithm by a call to 
+SocketSessionConfig.setTcpNoDelay(), e.g.:
+
+((SocketSessionConfig) connector.getSessionConfig()).setTcpNoDelay(false)
+
+However, even if you do this you cannot expect one session.write(bytes) 
+in MINA to correspond to one TCP packet on your network. 
+You should probably implement your own MINA ProtocolDecoder 
+to handle the assembly of incoming bytes into message objects. 
+The TextLineCodec is a good start if the protocol you're implementing 
+is based on text lines. For a more advanced example have a look 
+at the SumUp example in the MINA distribution.
+
